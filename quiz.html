@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Assessment — Mindmetric</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <a href="/" class="brand">
+            <span class="brand-mark">M</span>
+            <span>mindmetric<span class="brand-period">.</span></span>
+        </a>
+        <span class="nav-label">YOUR ASSESSMENT</span>
+    </header>
+
+    <main class="quiz-container">
+        <div class="quiz-heading">
+            <div class="eyebrow"><span class="status-dot"></span> FOCUS MODE</div>
+            <h1>Take your time.<br><span>Think it through.</span></h1>
+            <p>Choose one answer for each question. You can change your selections before submitting.</p>
+        </div>
+
+        <div class="progress-panel">
+            <div class="progress-copy">
+                <span>YOUR PROGRESS</span>
+                <strong id="progress-text">0 of {{ questions|length }} answered</strong>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <form action="/submit" method="POST" id="quiz-form">
+            {% for q in questions %}
+            <section class="question-card">
+                <div class="question-topline">
+                    <span class="question-number">QUESTION {{ "%02d"|format(loop.index) }}</span>
+                    <span class="difficulty-tag difficulty-{{ q.difficulty|lower }}">
+                        {{ q.difficulty }}
+                    </span>
+                </div>
+
+                <h2>{{ q.question }}</h2>
+                <p class="question-category">{{ q.category }}</p>
+
+                <div class="answer-options">
+                    {% for option in q.options %}
+                    <label class="answer-option">
+                        <input type="radio" name="{{ q.id }}" value="{{ option }}">
+                        <span class="answer-letter">{{ "ABCD"[loop.index0] }}</span>
+                        <span class="answer-text">{{ option }}</span>
+                        <span class="answer-check">✓</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endfor %}
+
+            <div class="submit-panel">
+                <p id="submit-hint">Answer as many questions as you can before submitting.</p>
+                <button type="submit" class="start-button submit-button">
+                    Submit assessment <span aria-hidden="true">↗</span>
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <footer class="site-footer">
+        <span>© 2026 Mindmetric</span>
+        <span>Reasoning, not a clinical IQ test.</span>
+    </footer>
+
+    <script>
+        const form = document.getElementById("quiz-form");
+        const radios = form.querySelectorAll('input[type="radio"]');
+        const total = Number("{{ questions|length }}");
+
+        function updateProgress() {
+            const answered = new Set(
+                [...radios]
+                    .filter(radio => radio.checked)
+                    .map(radio => radio.name)
+            ).size;
+
+            document.getElementById("progress-text").textContent =
+                `${answered} of ${total} answered`;
+
+            document.getElementById("progress-fill").style.width =
+                `${(answered / total) * 100}%`;
+
+            document.getElementById("submit-hint").textContent =
+                answered === total
+                    ? "All questions answered. Ready to see your results?"
+                    : `${total - answered} question(s) left unanswered.`;
+        }
+
+        radios.forEach(radio => {
+            radio.addEventListener("change", updateProgress);
+        });
+
+        form.addEventListener("submit", event => {
+            const unanswered = total -
+                new Set(
+                    [...radios]
+                        .filter(radio => radio.checked)
+                        .map(radio => radio.name)
+                ).size;
+
+            if (unanswered > 0) {
+                const confirmed = confirm(
+                    `${unanswered} question(s) are unanswered. Submit anyway?`
+                );
+
+                if (!confirmed) {
+                    event.preventDefault();
+                }
+            }
+        });
+
+        updateProgress();
+    </script>
+</body>
+</html>

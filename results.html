@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Results — Mindmetric</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <a href="/" class="brand">
+            <span class="brand-mark">M</span>
+            <span>mindmetric<span class="brand-period">.</span></span>
+        </a>
+        <span class="nav-label">ASSESSMENT RESULTS</span>
+    </header>
+
+    <main class="results-container">
+        <section class="results-hero">
+            <div class="eyebrow">
+                <span class="status-dot"></span>
+                ASSESSMENT COMPLETE
+            </div>
+            <h1>Your thinking,<br><span>in perspective.</span></h1>
+            <p>Here's how you performed in this reasoning assessment.</p>
+        </section>
+        
+        <section class="iq-estimate-card">
+            <div class="iq-estimate-copy">
+                <span class="score-label">YOUR IQ-STYLE ESTIMATE</span>
+                <h2>{{ iq_estimate }}</h2>
+                <p>A quiz-based score derived from your weighted performance.</p>
+            </div>
+            <div class="iq-estimate-mark">M</div>
+        </section>
+
+        <section class="score-grid">
+            <article class="score-card score-primary">
+                <span class="score-label">WEIGHTED SCORE</span>
+                <div class="score-number">{{ weighted_score }}<span>%</span></div>
+                <p>Based on the points earned across difficulty levels.</p>
+            </article>
+
+            <article class="score-card">
+                <span class="score-label">ANSWERS CORRECT</span>
+                <div class="score-number">{{ correct }}<span>/{{ total }}</span></div>
+                <p>Questions answered correctly.</p>
+            </article>
+
+            <article class="score-card">
+                <span class="score-label">ACCURACY</span>
+                <div class="score-number">{{ accuracy }}<span>%</span></div>
+                <p>Percentage of questions answered correctly.</p>
+            </article>
+        </section>
+
+        <section class="breakdown-section">
+            <div class="section-heading">
+                <div>
+                    <span class="section-kicker">PERFORMANCE</span>
+                    <h2>Your breakdown</h2>
+                </div>
+            </div>
+
+            <div class="breakdown-grid">
+                <article class="breakdown-card">
+                    <h3>By category</h3>
+                    {% for category, stats in category_stats.items() %}
+                    <div class="stat-row">
+                        <div class="stat-label-row">
+                            <span>{{ category }}</span>
+                            <strong>{{ stats.correct }}/{{ stats.total }}</strong>
+                        </div>
+                        <div class="stat-track">
+                            <div class="stat-fill" style="width: {{ (stats.correct / stats.total * 100)|round }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </article>
+
+                <article class="breakdown-card">
+                    <h3>By difficulty</h3>
+                    {% for difficulty, stats in difficulty_stats.items() %}
+                    <div class="stat-row">
+                        <div class="stat-label-row">
+                            <span>{{ difficulty }}</span>
+                            <strong>{{ stats.correct }}/{{ stats.total }}</strong>
+                        </div>
+                        <div class="stat-track">
+                            <div class="stat-fill" style="width: {{ (stats.correct / stats.total * 100)|round }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </article>
+            </div>
+        </section>
+
+        <section class="review-section">
+            <div class="section-heading">
+                <div>
+                    <span class="section-kicker">LEARN FROM THE EXPERIENCE</span>
+                    <h2>Question review</h2>
+                    <p>See the correct answer and understand the reasoning.</p>
+                </div>
+            </div>
+
+            {% for item in review %}
+            <article class="review-card">
+                <div class="review-topline">
+                    <span class="question-number">QUESTION {{ "%02d"|format(loop.index) }}</span>
+                    {% if item.correct %}
+                    <span class="review-status correct-status">✓ Correct</span>
+                    {% else %}
+                    <span class="review-status incorrect-status">✕ Incorrect</span>
+                    {% endif %}
+                </div>
+
+                <h3>{{ item.question }}</h3>
+
+                <div class="review-answer">
+                    <span class="review-answer-label">YOUR ANSWER</span>
+                    {% if item.chosen %}
+                    <strong class="{{ 'answer-good' if item.correct else 'answer-bad' }}">
+                        {{ item.chosen }}
+                    </strong>
+                    {% else %}
+                    <strong class="answer-bad">Not answered</strong>
+                    {% endif %}
+                </div>
+
+                {% if not item.correct %}
+                <div class="review-answer">
+                    <span class="review-answer-label">CORRECT ANSWER</span>
+                    <strong class="answer-good">{{ item.answer }}</strong>
+                </div>
+                {% endif %}
+
+                <div class="explanation">
+                    <strong>Why?</strong>
+                    <p>{{ item.explanation }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </section>
+
+        <div class="results-actions">
+            <a href="/" class="start-button retry-button">
+                Try another assessment <span aria-hidden="true">↗</span>
+            </a>
+            <p>This is an informal reasoning score, not a scientifically validated IQ measurement.</p>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <span>© 2026 Mindmetric</span>
+        <span>Keep questioning.</span>
+    </footer>
+</body>
+</html>

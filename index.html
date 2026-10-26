@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mindmetric — Reasoning Assessment</title>
+    <meta name="description" content="Challenge your reasoning skills with a structured reasoning assessment.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <a href="/" class="brand">
+            <span class="brand-mark">M</span>
+            <span>mindmetric<span class="brand-period">.</span></span>
+        </a>
+        <span class="nav-label">REASONING ASSESSMENT</span>
+    </header>
+
+    <main class="hero">
+        <section class="hero-copy">
+            <div class="eyebrow">
+                <span class="status-dot"></span>
+                A BETTER WAY TO CHALLENGE YOUR MIND
+            </div>
+
+            <h1>Think clearly.<br>Think <span>deeper.</span></h1>
+
+            <p class="hero-description">
+                Explore patterns, solve problems, and test your logical
+                reasoning with a focused assessment designed to challenge
+                the way you think.
+            </p>
+
+            <div class="feature-row">
+                <div class="feature">
+                    <span class="feature-icon">01</span>
+                    <div>
+                        <strong>Multiple categories</strong>
+                        <p>Logic, numbers and patterns</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <span class="feature-icon">02</span>
+                    <div>
+                        <strong>Instant results</strong>
+                        <p>Score breakdown and explanations</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="start-card">
+            <div class="card-topline">
+                <span class="card-kicker">YOUR NEXT CHALLENGE</span>
+                <span class="card-index">01 / 01</span>
+            </div>
+
+            <h2>Ready to begin?</h2>
+            <p class="card-description">
+                Choose your difficulty and see how you perform.
+            </p>
+
+            <form action="/start" method="POST">
+                <label for="difficulty">SELECT DIFFICULTY</label>
+
+                <div class="difficulty-options">
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="Easy">
+                        <span class="option-content">
+                            <strong>Easy</strong>
+                            <small>Warm up</small>
+                        </span>
+                    </label>
+
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="Medium">
+                        <span class="option-content">
+                            <strong>Medium</strong>
+                            <small>Think it through</small>
+                        </span>
+                    </label>
+
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="Hard">
+                        <span class="option-content">
+                            <strong>Hard</strong>
+                            <small>Push further</small>
+                        </span>
+                    </label>
+
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="Mixed" checked>
+                        <span class="option-content">
+                            <strong>Mixed</strong>
+                            <small>All levels</small>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="test-details">
+                    <div>
+                        <span class="detail-label">QUESTIONS</span>
+                        <strong>10</strong>
+                    </div>
+                    <div>
+                        <span class="detail-label">FORMAT</span>
+                        <strong>Multiple choice</strong>
+                    </div>
+                    <div>
+                        <span class="detail-label">RESULTS</span>
+                        <strong>Instant</strong>
+                    </div>
+                </div>
+
+                <button type="submit" class="start-button">
+                    Start assessment <span aria-hidden="true">↗</span>
+                </button>
+            </form>
+
+            <p class="privacy-note">
+                No account required · Your session stays in this browser
+            </p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <span>© 2026 Mindmetric</span>
+        <span>Built for curious minds.</span>
+    </footer>
+</body>
+</html>
